@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # 1. SYSTEM UNDER TEST A: Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: sut_prometheus
+    volumes:
+      # Volume for persistent data storage and cleanup
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/configure/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-remote-write-receiver' # Critical parameter to allow external data ingestion
+    ports:
+      - "9090:9090"
+    # Resource constraints for fair comparison (e.g., 2 CPUs and 4GB RAM)[cite: 1]
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+
+  # 2. SYSTEM UNDER TEST B: VictoriaMetrics (Single-Node)[cite: 1]
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:latest
+    container_name: sut_victoriametrics
+    volumes:
+      - vm_data:/victoria-metrics-data
+    ports:
+      - "8428:8428"
+    # Identical resource constraints for fair benchmarking[cite: 1]
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+
+volumes:
+  prometheus_data:
+  vm_data:

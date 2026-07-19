@@ -1,0 +1,34 @@
+---------->>>>> 1. Dataset
+
+Google Cluster Data 2019 Traces
+
+Link : https://www.kaggle.com/datasets/derrickmwiti/google-2019-cluster-sample/data
+
+average_usage ve maximum_usage sütunları sayı değil, JSON string formatında tutuluyor.
+"{'cpus': 0.00466156005859375, 'memory': 0.00592041015625}"
+
+TSDB'e veri basarken bu satırı python ile okuyup iki ayrı metrik çıkaracağız.
+
+assigned_memory stun saturation noktamız.
+
+
+---------->>>>> 2. Dataset
+
+Alibaba Cluster Trace v2018
+
+Link : https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2018
+
+Tüm veri 280GB. Ben machine_usage.csv 'yi kullanacağım. Boyutu 1.7GB. Zipten çıkarınca 9GB oluyor.
+
+İçinde machine_id, time_stamp, cpu_util_percent, mem_util_percent ve disk_io_percent var.
+
+# Sadece 1.7 GB olan makine kullanım verisini indirmek için
+wget -c http://aliopentrace.oss-cn-beijing.aliyuncs.com/v2018Traces/machine_usage.tar.gz
+
+tar -zxvf machine_usage.tar.gz
+
+9GB'lik verinin ilk 1 milyon satirini aldım sadece
+head -n 1000000 machine_usage.csv > machine_usage_mini.csv
+
+
+
