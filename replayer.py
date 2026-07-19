@@ -7,7 +7,7 @@ TARGET_URL = "http://localhost:8428/api/v1/write"
 def csv_to_timeseries(file_path):
     print(f"Streaming {file_path} over a 15-minute window...")
     
-    # 15 minutes = 900 seconds. Batch size calculation for 1M rows spread across 900 seconds[cite: 1]:
+    # 15 minutes = 900 seconds. Batch size calculation for 1M rows spread across 900 seconds:
     BATCH_SIZE = 1111 
     
     with open(file_path, mode='r') as file:
@@ -20,12 +20,12 @@ def csv_to_timeseries(file_path):
             if not row:
                 continue
                 
-            # Mapping columns according to the Alibaba dataset schema[cite: 4]
+            # Mapping columns according to the Alibaba dataset schema
             machine_id = row[0]
             cpu_util = float(row[2]) if row[2] else 0.0
             mem_util = float(row[3]) if row[3] else 0.0
             
-            # Using current local timestamp in milliseconds for live replay tracking[cite: 1]
+            # Using current local timestamp in milliseconds for live replay tracking
             current_timestamp_ms = int(time.time() * 1000)
             
             payload = f"alibaba_cpu_util_percent{{machine_id=\"{machine_id}\"}} {cpu_util} {current_timestamp_ms}\n" \
@@ -34,7 +34,7 @@ def csv_to_timeseries(file_path):
             try:
                 requests.post(TARGET_URL, data=payload)
             except Exception:
-                pass # Suppress connection exceptions during the pilot smoke test[cite: 1]
+                pass # Suppress connection exceptions during the pilot smoke test
                 
             counter += 1
             
