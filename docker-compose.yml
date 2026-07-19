@@ -14,14 +14,14 @@ services:
       - '--web.enable-remote-write-receiver' # Critical parameter to allow external data ingestion
     ports:
       - "9090:9090"
-    # Resource constraints for fair comparison (e.g., 2 CPUs and 4GB RAM)[cite: 1]
+    # Resource constraints for fair comparison (e.g., 2 CPUs and 4GB RAM)
     deploy:
       resources:
         limits:
           cpus: '2.0'
           memory: 4G
 
-  # 2. SYSTEM UNDER TEST B: VictoriaMetrics (Single-Node)[cite: 1]
+  # 2. SYSTEM UNDER TEST B: VictoriaMetrics (Single-Node)
   victoriametrics:
     image: victoriametrics/victoria-metrics:latest
     container_name: sut_victoriametrics
@@ -29,7 +29,7 @@ services:
       - vm_data:/victoria-metrics-data
     ports:
       - "8428:8428"
-    # Identical resource constraints for fair benchmarking[cite: 1]
+    # Identical resource constraints for fair benchmarking
     deploy:
       resources:
         limits:
